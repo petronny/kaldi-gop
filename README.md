@@ -16,5 +16,4 @@ cmake .. && make
 ```
 cd egs/gop-compute
 ./run.sh
-<<<<<<< HEAD
 ```
