@@ -38,20 +38,26 @@ protected:
   AmDiagGmm am_;
   TransitionModel tm_;
   ContextDependency ctx_dep_;
-  TrainingGraphCompiler *gc_;
   Vector<BaseFloat> gop_result_;
   FasterDecoderOptions decode_opts_;
+  TrainingGraphCompiler *gc_;
+  std::map<int32, int32> pdfid_to_tid;
 
-  void AlignUtterance(fst::VectorFst<fst::StdArc> *fst,
-                      DecodableInterface *decodable,
-                      std::vector<int32> *align);
-
-  void MakePhoneLoopAcceptor(fst::VectorFst<fst::StdArc> *ofst);
-
+  void MakePhoneLoopAcceptor(std::vector<int32> &labels,
+                             fst::VectorFst<fst::StdArc> *ofst);
+  BaseFloat Decode(fst::VectorFst<fst::StdArc> &fst,
+                   DecodableAmDiagGmmScaled &decodable,
+                   std::vector<int32> *align = NULL);
   BaseFloat ComputeGopNumera(DecodableAmDiagGmmScaled &decodable,
-                             std::vector<int32> &align_in_phone);
+                             std::vector<int32> &align,
+                             MatrixIndexT start_frame,
+                             int32 size);
+  BaseFloat ComputeGopNumeraViterbi(DecodableAmDiagGmmScaled &decodable,
+                                    std::vector<int32> &align_in_phone);
   BaseFloat ComputeGopDenomin(DecodableAmDiagGmmScaled &decodable,
-                              std::vector<int32> &align_in_phone);
+                              int32 phone_l, int32 phone_r);
+  void GetContextFromSplit(std::vector<std::vector<int32> > split,
+                           int32 index, int32 &phone_l, int32 &phone_r);
 };
 
 }  // End namespace kaldi

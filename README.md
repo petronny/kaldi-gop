@@ -1,8 +1,6 @@
 # kaldi-gop
 This project computes GOP (Goodness of Pronunciation) bases on Kaldi.
 
-This project has not been ready by far.
-
 __This fork is for Archlinux only.__
 
 ## How to build
@@ -18,4 +16,5 @@ cmake .. && make
 ```
 cd egs/gop-compute
 ./run.sh
+<<<<<<< HEAD
 ```
