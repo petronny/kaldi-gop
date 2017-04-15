@@ -2,14 +2,17 @@
 
 // Copyright 2016-2017  Junbo Zhang
 
-// This project based on Kaldi (https://github.com/kaldi-asr/kaldi).
-// All the Kaldi's codes in this project are under the Apache License, Version 2.0.
-// You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-// 
-// However, this file has not been merged into Kaldi's master branch,
-// and the codes in this file are NOT UNDER THE SAME LICENSE of Kaldi's.
-// The codes in this file are NOT ALLOWED TO USE, COPY, DISTRIBUTE, OR MODIFY
-// unless being permitted by the author.
+// This program based on Kaldi (https://github.com/kaldi-asr/kaldi).
+// However, this program is NOT UNDER THE SAME LICENSE of Kaldi's.
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// version 2 as published by the Free Software Foundation;
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
 
 #include <algorithm>
 #include <limits>
@@ -49,21 +52,6 @@ void GmmGop::Init(std::string &tree_in_filename,
   for (size_t i = 0; i < tm_.NumTransitionIds(); i++) {
     pdfid_to_tid[tm_.TransitionIdToPdf(i)] = i;
   }
-}
-
-void GmmGop::MakePhoneLoopAcceptor(std::vector<int32> &labels,
-                                   fst::VectorFst<fst::StdArc> *ofst) {
-  // TODO: make acceptor according phone contexts
-  ofst->DeleteStates();
-  StateId start_state = ofst->AddState();
-  ofst->SetStart(start_state);
-  const std::vector<int32> &phone_syms = tm_.GetPhones();
-  for (size_t i = 0; i < phone_syms.size(); i++) {
-    StateId next_state = ofst->AddState();
-    Arc arc_phone(phone_syms[i], phone_syms[i], Weight::One(), next_state);
-    ofst->AddArc(start_state, arc_phone);
-  }
-  ofst->SetFinal(start_state, Weight::One());
 }
 
 BaseFloat GmmGop::Decode(fst::VectorFst<fst::StdArc> &fst,
